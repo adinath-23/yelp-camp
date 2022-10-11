@@ -6,8 +6,13 @@ const mapboxToken = process.env.MAPBOX_TOKEN;
 const geocoder = mbxGeocoding({ accessToken: mapboxToken })
 
 module.exports.index = async (req, res) => {
-    const campgrounds = await Campground.find({});
-    res.render('campgrounds/index', { campgrounds });
+    let page = parseInt(req.query.page) || 1;
+    const totalPages = Math.ceil(await Campground.count() / 10);
+    if (page > totalPages || page < 1) {
+        page = 1
+    }
+    const campgrounds = await Campground.find({}).skip((page - 1) * 10).limit(10);
+    res.render('campgrounds/index', { campgrounds, page, totalPages });
 }
 
 module.exports.renderNewForm = (req, res) => {

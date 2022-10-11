@@ -37,6 +37,24 @@
   </div>
 </ul>
 
+<% if (totalPages > 1) {%>
+<nav aria-label="Page navigation example" class="my-3">
+  <ul class="pagination justify-content-center">
+    <li class="page-item <%= page===1?'disabled':'' %>">
+      <a class="page-link" href="/campgrounds?page=<%= page-1 %>">Previous</a>
+    </li>
+    <% for (let i=page-2; i<= page+2 && i<= totalPages;i++) { if (i>0) { %>
+    <li class="page-item <%= i === page?'active':'' %>">
+      <a class="page-link" href="/campgrounds?page=<%= i %>"><%=i %></a>
+    </li>
+    <% } } %>
+    <li class="page-item <%= page===totalPages?'disabled':'' %>">
+      <a class="page-link" href="/campgrounds?page=<%= page+1 %>">Next</a>
+    </li>
+  </ul>
+</nav>
+<% } %>
+
 <script>
   const mapToken = "<%-process.env.MAPBOX_TOKEN%>";
   const campgrounds = {features:<%-JSON.stringify(campgrounds)%>};
