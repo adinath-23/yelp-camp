@@ -48,6 +48,10 @@ CampgroundSchema.virtual('properties.popupMarkup').get(function () {
     <p>${this.location}</p>`
 })
 
+CampgroundSchema.virtual('avgRating').get(function () {
+    return Math.ceil(this.reviews.map((review) => review.rating).reduce((a, b) => a + b, 0) / this.reviews.length);
+})
+
 CampgroundSchema.post('findOneAndDelete', async function (data) {
     if (data) {
         await Review.deleteMany({

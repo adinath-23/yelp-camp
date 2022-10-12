@@ -11,8 +11,9 @@ module.exports.index = async (req, res) => {
     if (page > totalPages || page < 1) {
         page = 1
     }
-    const campgrounds = await Campground.find({}).skip((page - 1) * 10).limit(10);
-    res.render('campgrounds/index', { campgrounds, page, totalPages });
+    const campgrounds = await Campground.find({}).skip((page - 1) * 10).limit(10).populate('reviews', 'rating');
+    const allCampgrounds = await Campground.find({})
+    res.render('campgrounds/index', { campgrounds, page, totalPages, allCampgrounds });
 }
 
 module.exports.renderNewForm = (req, res) => {
@@ -55,7 +56,6 @@ module.exports.editCampground = async (req, res, next) => {
             await cloudinary.uploader.destroy(filename)
         }
         await campground.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } })
-        console.log(campground)
     }
     req.flash('success', 'Campground updated successfully')
     res.redirect(`/campgrounds/${campground._id}`);

@@ -1,5 +1,6 @@
 <% layout('/layout/boilerplate.ejs') %>
 <link rel="stylesheet" href="/css/app.css" />
+<link rel="stylesheet" href="/css/stars.css" />
 <div id="cluster-map"></div>
 <ul>
   <h1 class="card-title my-4 text-center">All Campgrounds</h1>
@@ -27,6 +28,12 @@
         <div class="card-body">
           <h5 class="card-title"><%= campground.title %></h5>
           <p class="card-subtitle mb-1"><%=campground.location %></p>
+          <p
+            class="starability-result mx-auto"
+            data-rating="<%= campground.avgRating%>"
+          >
+            Rated: <%= campground.avgRating%> stars
+          </p>
           <a href="/campgrounds/<%= campground._id %> " class="btn btn-primary"
             >View Details</a
           >
@@ -57,7 +64,7 @@
 
 <script>
   const mapToken = "<%-process.env.MAPBOX_TOKEN%>";
-  const campgrounds = {features:<%-JSON.stringify(campgrounds)%>};
+  const campgrounds = {features:<%-JSON.stringify(allCampgrounds)%>};
 </script>
 
 <script src="/js/clusterMap.js"></script>
